@@ -14,7 +14,7 @@ game.setAttribute('height', getComputedStyle(game)['height'])
 game.setAttribute('width', getComputedStyle(game)['width'])
 // ====================== ENTITIES ======================= //
 class Snake {
-    constructor(x, y, color, width, height,changeX,changeY) {
+    constructor(x, y, color, width, height, changeX, changeY) {
         let array = [
             [x, y],
             [x - this.width, y],
@@ -27,19 +27,22 @@ class Snake {
         this.width = width
         this.height = height
         this.alive = true
-       
-       
+
+
         this.changeX = changeX
-        this.changeY =  changeY
+        this.changeY = changeY
 
         this.render = function () {
             ctx.fillStyle = this.color
+            ctx.strokestyle = 'black'
 
             // ctx.fillRect(this.x, this.y, this.width, this.height)
             for (let i = 0; i < array.length; i++) {
                 ctx.fillRect(array[i][0], array[i][1], this.width, this.height)
+                ctx.strokeRect(array[i][0], array[i][1], this.width, this.height)
+
                 this.x = array[0][0]
-        this.y = array[0][1]
+                this.y = array[0][1]
             }
 
         }
@@ -56,20 +59,26 @@ class Snake {
         }
         this.eatMouse = function () {
             let l = array.length
-            console.log(array.length)
-        if(array[array.length-1][1] == array[array.length-2][1] && array[array.length-1][1]- array[array.length-2][1]>0){
-            array.push([array[array.length-1][0]+this.changeX])
-        }
-        else if(array[array.length-1][1] == array[array.length-2][1] && array[array.length-1][1]- array[array.length-2][1]<0){
-            array.push([array[array.length-1][0]-this.changeX])
-        }
+            console.log("eatMouse" + array.length)
+            if (array[array.length - 1][1] == array[array.length - 2][1] && array[array.length - 1][0] - array[array.length - 2][0] > 0) {
+                array.push([array[array.length - 1][0] + this.changeX, array[array.length - 1][1]])
+            }
+            else if (array[array.length - 1][1] == array[array.length - 2][1] && array[array.length - 1][0] - array[array.length - 2][0] < 0) {
+                array.push([array[array.length - 1][0] - this.changeX, array[array.length - 1][1]])
+            }
+            else if (array[array.length - 1][0] == array[array.length - 2][0] && array[array.length - 1][1] - array[array.length - 2][1] < 0) {
+                array.push([array[array.length - 1][0], array[array.length - 1][1]] - this.changeY)
+            }
+            else if (array[array.length - 1][0] == array[array.length - 2][0] && array[array.length - 1][1] - array[array.length - 2][1] > 0) {
+                array.push([array[array.length - 1][0], array[array.length - 1][1]] + this.changeY)
+            }
         }
 
-        this.detectCollision = function (){
+        this.detectCollision = function () {
             // console.log(game.height )
             // console.log(game.width )
             // console.log(array[0][1])
-            
+
             if (array[0][0] < 0 || array[0][0] > game.width - snake.width || array[0][1] < 0 || array[0][1] > game.height - snake.height) {
                 gameStatus.textContent = 'you hit the wall'
                 console.log("you hit the wall")
@@ -107,19 +116,19 @@ const movementHandler = (e) => {
             console.log(snake.array)
             console.log(snake.changeX)
             snake.changeX = 0
-            snake.changeY = -10
+            snake.changeY = -20
             break
         case 'ArrowDown':
             snake.changeX = 0
-            snake.changeY = 10
+            snake.changeY = 20
             break
         case 'ArrowLeft':
-            snake.changeX = -10
+            snake.changeX = -20
             snake.changeY = 0
             break
         case 'ArrowRight':
             // snake.x < game.width - snake.width ? snake.moveR() : null
-            snake.changeX = 10
+            snake.changeX = 20
             snake.changeY = 0
 
             console.log("move")
@@ -143,7 +152,7 @@ function addNewTarget() {
 
 
 function detectHit(p1, p2) {
-   console.log(p1.x, p1.y, p2.x, p2.y)
+    console.log(p1.x, p1.y, p2.x, p2.y)
     let hitTest =
         p1.y + p1.height > p2.y &&
         p1.y < p2.y + p2.height &&
@@ -186,7 +195,7 @@ const gameLoop = () => {
 // ====================== PAINT INITIAL SCREEN ======================= //
 // EVENT LISTENERS
 window.addEventListener('DOMContentLoaded', function (e) {
-    snake = new Snake(400, 200, '#00ff00', 20, 20,10,0)
+    snake = new Snake(400, 200, '#00ff00', 20, 20, 00, 0)
     target = new Mouse(100, 100, '#ff0000', 40, 80, 3)
     const runGame = this.setInterval(gameLoop, 120)
 })
