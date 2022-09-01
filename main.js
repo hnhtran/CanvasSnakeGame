@@ -14,20 +14,21 @@ game.setAttribute('height', getComputedStyle(game)['height'])
 game.setAttribute('width', getComputedStyle(game)['width'])
 // ====================== ENTITIES ======================= //
 class Snake {
-    constructor(x, y, color, width, height, step,changeX,changeY) {
-        this.x = x
-        this.y = y
-        this.color = color
-        this.width = width
-        this.height = height
-        this.alive = true
-        this.step = step
+    constructor(x, y, color, width, height,changeX,changeY) {
         let array = [
             [x, y],
             [x - this.width, y],
             [x - this.width * 2, y],
             [x - this.width * 3, y]
         ]
+        this.x = array[0][0]
+        this.y = array[0][1]
+        this.color = color
+        this.width = width
+        this.height = height
+        this.alive = true
+       
+       
         this.changeX = changeX
         this.changeY =  changeY
 
@@ -37,6 +38,8 @@ class Snake {
             // ctx.fillRect(this.x, this.y, this.width, this.height)
             for (let i = 0; i < array.length; i++) {
                 ctx.fillRect(array[i][0], array[i][1], this.width, this.height)
+                this.x = array[0][0]
+        this.y = array[0][1]
             }
 
         }
@@ -50,6 +53,16 @@ class Snake {
                 // console.log(array)
                 // this.x += 10
             }
+        }
+        this.eatMouse = function () {
+            let l = array.length
+            console.log(array.length)
+        if(array[array.length-1][1] == array[array.length-2][1] && array[array.length-1][1]- array[array.length-2][1]>0){
+            array.push([array[array.length-1][0]+this.changeX])
+        }
+        else if(array[array.length-1][1] == array[array.length-2][1] && array[array.length-1][1]- array[array.length-2][1]<0){
+            array.push([array[array.length-1][0]-this.changeX])
+        }
         }
 
         this.detectCollision = function (){
@@ -68,7 +81,7 @@ class Snake {
     }
 }
 
-class Target {
+class Mouse {
     constructor(x, y, color, width, height) {
         this.x = x
         this.y = y
@@ -91,6 +104,7 @@ const movementHandler = (e) => {
     console.log(`movement: ${e.key}`)
     switch (e.key) {
         case 'ArrowUp':
+            console.log(snake.array)
             console.log(snake.changeX)
             snake.changeX = 0
             snake.changeY = -10
@@ -120,7 +134,7 @@ function addNewTarget() {
     setTimeout(function () {
         let x = Math.floor(Math.random() * game.width) - 40;
         let y = Math.floor(Math.random() * game.height) - 80;
-        target = new Target(x, y, "#bada55", 40, 80);
+        target = new Mouse(x, y, "#bada55", 40, 80);
         gameStatus.textContent = 'keep playing'
 
     }, 1000);
@@ -129,11 +143,7 @@ function addNewTarget() {
 
 
 function detectHit(p1, p2) {
-    // console.log(p1.y + p1.height > p2.y);
-    // console.log(p1.y < p2.y + p2.height);
-    // console.log(p1.x + p1.width > p2.x);
-    // console.log(p1.x < p2.x + p2.width);
-
+   console.log(p1.x, p1.y, p2.x, p2.y)
     let hitTest =
         p1.y + p1.height > p2.y &&
         p1.y < p2.y + p2.height &&
@@ -145,13 +155,14 @@ function detectHit(p1, p2) {
         console.log("hit");
         let newScore = Number(score.textContent) + 100;
         score.textContent = newScore;
-        gameStatus.textContent = 'Shrek is outta here!!'
+        gameStatus.textContent = 'You just had a yummy mouse meat !!'
         addNewTarget();
+        p1.eatMouse();
     } else {
         return false;
     }
 }
-
+``
 
 
 
@@ -175,8 +186,8 @@ const gameLoop = () => {
 // ====================== PAINT INITIAL SCREEN ======================= //
 // EVENT LISTENERS
 window.addEventListener('DOMContentLoaded', function (e) {
-    snake = new Snake(400, 200, '#00ff00', 20, 20, 6,10,0)
-    target = new Target(100, 100, '#ff0000', 40, 80, 3)
+    snake = new Snake(400, 200, '#00ff00', 20, 20,10,0)
+    target = new Mouse(100, 100, '#ff0000', 40, 80, 3)
     const runGame = this.setInterval(gameLoop, 120)
 })
 document.addEventListener('keydown', movementHandler)
