@@ -34,7 +34,7 @@ class Snake {
 
         this.render = function () {
             ctx.fillStyle = this.color
-            ctx.strokestyle = 'black'
+            // ctx.strokestyle = 'black'
 
             // ctx.fillRect(this.x, this.y, this.width, this.height)
             for (let i = 0; i < array.length; i++) {
@@ -47,43 +47,37 @@ class Snake {
 
         }
         this.move = function () {
-
+        // head move 1 step, tail move one step. Therefore, unshift arr 1, pop arr 1
             if (this.alive) {
-                // console.log(this.changeX)
                 array.unshift([array[0][0] + this.changeX, array[0][1] + this.changeY])
                 array.pop()
                 this.render()
-                // console.log(array)
-                // this.x += 10
             }
         }
         this.eatMouse = function () {
-            let l = array.length
-            console.log("eatMouse" + array.length)
-            if (array[array.length - 1][1] == array[array.length - 2][1] && array[array.length - 1][0] - array[array.length - 2][0] > 0) {
-                array.push([array[array.length - 1][0] + this.changeX, array[array.length - 1][1]])
-            }
-            else if (array[array.length - 1][1] == array[array.length - 2][1] && array[array.length - 1][0] - array[array.length - 2][0] < 0) {
-                array.push([array[array.length - 1][0] - this.changeX, array[array.length - 1][1]])
-            }
-            else if (array[array.length - 1][0] == array[array.length - 2][0] && array[array.length - 1][1] - array[array.length - 2][1] < 0) {
-                array.push([array[array.length - 1][0], array[array.length - 1][1]] - this.changeY)
-            }
-            else if (array[array.length - 1][0] == array[array.length - 2][0] && array[array.length - 1][1] - array[array.length - 2][1] > 0) {
-                array.push([array[array.length - 1][0], array[array.length - 1][1]] + this.changeY)
-            }
+            array.unshift([array[0][0] + this.changeX, array[0][1] + this.changeY])
         }
 
         this.detectCollision = function () {
-            // console.log(game.height )
-            // console.log(game.width )
-            // console.log(array[0][1])
-
+        // detect if snake hit the walls, detect if the snake hit itself
+            // hit the walls
             if (array[0][0] < 0 || array[0][0] > game.width - snake.width || array[0][1] < 0 || array[0][1] > game.height - snake.height) {
                 gameStatus.textContent = 'you hit the wall'
                 console.log("you hit the wall")
                 snake.alive = false;
             }
+            // hit itself
+            if(array.length > 4) {
+                for (let i = 1; i < array.length; i++) {
+                    // console.log(array)
+                    if (array[0][0] == array[i][0] && array[0][1] == array[i][1]) {
+                        gameStatus.textContent = 'you hit yourself'
+                        console.log("you hit yourself")
+                        snake.alive = false;
+                    }
+                }
+            }
+            return snake.alive
         }
 
 
@@ -110,78 +104,112 @@ class Mouse {
 // ====================== HELPER FUNCTIONS ======================= //
 //  KEYBOARD INTERACTION LOGIC
 const movementHandler = (e) => {
-    console.log(`movement: ${e.key}`)
+    e.preventDefault()
+    // let direction = e.key
+    // let nextDirection = direction
+    // let allowedDirections = []
+    // switch (direction) {
+    //     case 'ArrowUp':
+    //     case 'ArrowDown':
+    //         allowedDirections = ['ArrowLeft', 'ArrowRight']
+    //     case 'ArrowLeft':
+    //     case 'ArrowRight':
+    //         allowedDirections = ['ArrowUp', 'ArrowDown']
+    // }
+    // if (allowedDirections.includes(direction)) {
+    //     nextDirection = direction
+    // } else {
+    //     nextDirection = snake.direction
+    // }
+    // console.log(`nextDirection: ${nextDirection}`)
+    // console.log(`direction: ${direction}`)
+    //     snake.changeX = 0
+    //     snake.changeY = 0
+    //     switch (nextDirection) {
+    //         case 'ArrowUp':
+    //             snake.changeY = -snake.height
+    //             break;
+    //         case 'ArrowDown':
+    //             snake.changeY = snake.height
+    //             break;
+    //         case 'ArrowLeft':
+    //             snake.changeX = -snake.width
+    //             break;
+    //         case 'ArrowRight':
+    //             snake.changeX = snake.width
+    //             break;
+    //     }
     switch (e.key) {
+        case 'w':
+        case 'W':
         case 'ArrowUp':
-            console.log(snake.array)
-            console.log(snake.changeX)
             snake.changeX = 0
-            snake.changeY = -20
+            snake.changeY = -snake.height
             break
+        case 's':
+        case 'S':
         case 'ArrowDown':
             snake.changeX = 0
-            snake.changeY = 20
+            snake.changeY = snake.height
             break
         case 'ArrowLeft':
-            snake.changeX = -20
+        case 'a':
+        case 'A':
+            snake.changeX = -snake.width
             snake.changeY = 0
             break
+        case 'd':
+        case 'D':
         case 'ArrowRight':
-            // snake.x < game.width - snake.width ? snake.moveR() : null
-            snake.changeX = 20
+            snake.changeX = snake.width
             snake.changeY = 0
-
-            console.log("move")
             break
     }
-
 }
-
 
 function addNewTarget() {
     target.alive = false;
     setTimeout(function () {
-        let x = Math.floor(Math.random() * game.width) - 40;
-        let y = Math.floor(Math.random() * game.height) - 80;
-        target = new Mouse(x, y, "#bada55", 40, 80);
+        let [x, y] = randomCoordinates()
+        target = new Mouse(x, y, '#ff0000', 20, 20);
         gameStatus.textContent = 'keep playing'
 
     }, 1000);
     return true;
 }
 
+function randomCoordinates() {
+    let x, y
+    while (x % 20 != 0 || y % 20 != 0 || x < 0 || y < 0) {
+        x = Math.floor(Math.random() * game.width) - 20;
+        y = Math.floor(Math.random() * game.height) - 20;
+    }
+    return [x, y]
+}
 
 function detectHit(p1, p2) {
-    console.log(p1.x, p1.y, p2.x, p2.y)
-    let hitTest =
-        p1.y + p1.height > p2.y &&
-        p1.y < p2.y + p2.height &&
-        p1.x + p1.width > p2.x &&
-        p1.x < p2.x + p2.width; // {boolean} : if all are true -> hit
+    // console.log(p2.x, p2.y)
+    let hitTest = p1.x == p2.x && p1.y == p2.y
 
     if (hitTest) {
         // add 100 points
-        console.log("hit");
+        // console.log("hit");
         let newScore = Number(score.textContent) + 100;
         score.textContent = newScore;
-        gameStatus.textContent = 'You just had a yummy mouse meat !!'
+        gameStatus.textContent = 'Yumm!!'
+        // gameStatus.textContent = 'You just had a yummy mouse meat !!'
         addNewTarget();
         p1.eatMouse();
     } else {
         return false;
     }
 }
-``
-
-
-
-
 
 // ====================== GAME PROCESSES ======================= //
 const gameLoop = () => {
     ctx.clearRect(0, 0, game.width, game.height)
     movement.textContent = `X: ${snake.x}\nY: ${snake.y}`
-    if (target.alive) {
+    if (target.alive && snake.alive) {
         target.render()
         detectHit(snake, target)
         snake.detectCollision()
@@ -195,8 +223,9 @@ const gameLoop = () => {
 // ====================== PAINT INITIAL SCREEN ======================= //
 // EVENT LISTENERS
 window.addEventListener('DOMContentLoaded', function (e) {
+    e.preventDefault()
     snake = new Snake(400, 200, '#00ff00', 20, 20, 00, 0)
-    target = new Mouse(100, 100, '#ff0000', 40, 80, 3)
+    target = new Mouse(100, 100, '#ff0000', 20, 20)
     const runGame = this.setInterval(gameLoop, 120)
 })
 document.addEventListener('keydown', movementHandler)
