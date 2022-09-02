@@ -56,26 +56,12 @@ class Snake {
         }
         this.eatMouse = function () {
             array.unshift([array[0][0] + this.changeX, array[0][1] + this.changeY])
-        //     let l = array.length
-        //     console.log(this.changeX, this.changeY)
-        //     if (array[l - 1][1] == array[l - 2][1] && array[l - 1][0] - array[l - 2][0] > 0) {
-        //         array.push([array[l - 1][0] + this.changeX, array[l - 1][1]])
-        //     }
-        //     else if (array[l - 1][1] == array[l - 2][1] && array[l - 1][0] - array[l - 2][0] < 0) {
-        //         array.push([array[l - 1][0] - this.changeX, array[l - 1][1]])
-        //     }
-        //     else if (array[l - 1][0] == array[l - 2][0] && array[l - 1][1] - array[l - 2][1] < 0) {
-        //         array.push([array[l - 1][0], array[l - 1][1]] - this.changeY)
-        //     }
-        //     else if (array[l - 1][0] == array[l - 2][0] && array[l - 1][1] - array[l - 2][1] > 0) {
-        //         array.push([array[l - 1][0], array[l - 1][1]] + this.changeY)
-        //     }
         }
 
         this.detectCollision = function () {
         // detect if snake hit the walls, detect if the snake hit itself
             // hit the walls
-            if (array[0][0] == 0 || array[0][0] == game.width - snake.width || array[0][1] == 0 || array[0][1] == game.height - snake.height) {
+            if (array[0][0] < 0 || array[0][0] > game.width - snake.width || array[0][1] < 0 || array[0][1] > game.height - snake.height) {
                 gameStatus.textContent = 'you hit the wall'
                 console.log("you hit the wall")
                 snake.alive = false;
@@ -83,7 +69,7 @@ class Snake {
             // hit itself
             if(array.length > 4) {
                 for (let i = 1; i < array.length; i++) {
-                    console.log(array)
+                    // console.log(array)
                     if (array[0][0] == array[i][0] && array[0][1] == array[i][1]) {
                         gameStatus.textContent = 'you hit yourself'
                         console.log("you hit yourself")
@@ -118,28 +104,31 @@ class Mouse {
 // ====================== HELPER FUNCTIONS ======================= //
 //  KEYBOARD INTERACTION LOGIC
 const movementHandler = (e) => {
-    // console.log(`movement: ${e.key}`)
+    e.preventDefault()
     switch (e.key) {
+        case 'w':
+        case 'W':
         case 'ArrowUp':
-            // console.log(snake.array)
-            // console.log(snake.changeX)
             snake.changeX = 0
-            snake.changeY = -20
+            snake.changeY = -snake.height
             break
+        case 's':
+        case 'S':
         case 'ArrowDown':
             snake.changeX = 0
-            snake.changeY = 20
+            snake.changeY = snake.height
             break
         case 'ArrowLeft':
-            snake.changeX = -20
+        case 'a':
+        case 'A':
+            snake.changeX = -snake.width
             snake.changeY = 0
             break
+        case 'd':
+        case 'D':
         case 'ArrowRight':
-            // snake.x < game.width - snake.width ? snake.moveR() : null
-            snake.changeX = 20
+            snake.changeX = snake.width
             snake.changeY = 0
-
-            // console.log("move")
             break
     }
 
@@ -175,14 +164,14 @@ function detectHit(p1, p2) {
         // console.log("hit");
         let newScore = Number(score.textContent) + 100;
         score.textContent = newScore;
-        gameStatus.textContent = 'You just had a yummy mouse meat !!'
+        gameStatus.textContent = 'Yumm!!'
+        // gameStatus.textContent = 'You just had a yummy mouse meat !!'
         addNewTarget();
         p1.eatMouse();
     } else {
         return false;
     }
 }
-``
 
 // ====================== GAME PROCESSES ======================= //
 const gameLoop = () => {
@@ -202,6 +191,7 @@ const gameLoop = () => {
 // ====================== PAINT INITIAL SCREEN ======================= //
 // EVENT LISTENERS
 window.addEventListener('DOMContentLoaded', function (e) {
+    e.preventDefault()
     snake = new Snake(400, 200, '#00ff00', 20, 20, 00, 0)
     target = new Mouse(100, 100, '#ff0000', 20, 20)
     const runGame = this.setInterval(gameLoop, 120)
