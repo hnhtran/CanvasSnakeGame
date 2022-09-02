@@ -110,11 +110,11 @@ class Mouse {
 // ====================== HELPER FUNCTIONS ======================= //
 //  KEYBOARD INTERACTION LOGIC
 const movementHandler = (e) => {
-    console.log(`movement: ${e.key}`)
+    // console.log(`movement: ${e.key}`)
     switch (e.key) {
         case 'ArrowUp':
-            console.log(snake.array)
-            console.log(snake.changeX)
+            // console.log(snake.array)
+            // console.log(snake.changeX)
             snake.changeX = 0
             snake.changeY = -20
             break
@@ -131,7 +131,7 @@ const movementHandler = (e) => {
             snake.changeX = 20
             snake.changeY = 0
 
-            console.log("move")
+            // console.log("move")
             break
     }
 
@@ -141,18 +141,29 @@ const movementHandler = (e) => {
 function addNewTarget() {
     target.alive = false;
     setTimeout(function () {
-        let x = Math.floor(Math.random() * game.width) - 40;
-        let y = Math.floor(Math.random() * game.height) - 80;
-        target = new Mouse(x, y, "#bada55", 40, 80);
+        let [x, y] = randomCoordinates()
+        target = new Mouse(x, y, '#ff0000', 20, 20);
         gameStatus.textContent = 'keep playing'
 
     }, 1000);
     return true;
 }
 
+function randomCoordinates() {
+    let x, y
+    while (x % 20 != 0 || y % 20 != 0) {
+        x = Math.floor(Math.random() * game.width) - 20;
+        y = Math.floor(Math.random() * game.height) - 20;
+    }
+    return [x, y]
+}
 
 function detectHit(p1, p2) {
     console.log(p1.x, p1.y, p2.x, p2.y)
+    console.log(p1.width, p1.height, p2.width, p2.height)
+    console.log(p1.changeX, p1.changeY)
+    console.log(`game width: ${game.width}`)
+    console.log(`game height: ${game.height}`)
     let hitTest =
         p1.y + p1.height > p2.y &&
         p1.y < p2.y + p2.height &&
@@ -161,7 +172,7 @@ function detectHit(p1, p2) {
 
     if (hitTest) {
         // add 100 points
-        console.log("hit");
+        // console.log("hit");
         let newScore = Number(score.textContent) + 100;
         score.textContent = newScore;
         gameStatus.textContent = 'You just had a yummy mouse meat !!'
@@ -173,15 +184,11 @@ function detectHit(p1, p2) {
 }
 ``
 
-
-
-
-
 // ====================== GAME PROCESSES ======================= //
 const gameLoop = () => {
     ctx.clearRect(0, 0, game.width, game.height)
     movement.textContent = `X: ${snake.x}\nY: ${snake.y}`
-    if (target.alive) {
+    if (target.alive && snake.alive) {
         target.render()
         detectHit(snake, target)
         snake.detectCollision()
@@ -196,7 +203,7 @@ const gameLoop = () => {
 // EVENT LISTENERS
 window.addEventListener('DOMContentLoaded', function (e) {
     snake = new Snake(400, 200, '#00ff00', 20, 20, 00, 0)
-    target = new Mouse(100, 100, '#ff0000', 40, 80, 3)
+    target = new Mouse(100, 100, '#ff0000', 20, 20)
     const runGame = this.setInterval(gameLoop, 120)
 })
 document.addEventListener('keydown', movementHandler)
