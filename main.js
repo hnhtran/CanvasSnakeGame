@@ -75,11 +75,23 @@ class Snake {
         this.detectCollision = function () {
         // detect if snake hit the walls, detect if the snake hit itself
             // hit the walls
-            if (array[0][0] < 0 || array[0][0] == game.width - snake.width || array[0][1] < 0 || array[0][1] == game.height - snake.height) {
+            if (array[0][0] == 0 || array[0][0] == game.width - snake.width || array[0][1] == 0 || array[0][1] == game.height - snake.height) {
                 gameStatus.textContent = 'you hit the wall'
                 console.log("you hit the wall")
                 snake.alive = false;
             }
+            // hit itself
+            if(array.length > 4) {
+                for (let i = 1; i < array.length; i++) {
+                    console.log(array)
+                    if (array[0][0] == array[i][0] && array[0][1] == array[i][1]) {
+                        gameStatus.textContent = 'you hit yourself'
+                        console.log("you hit yourself")
+                        snake.alive = false;
+                    }
+                }
+            }
+            return snake.alive
         }
 
 
