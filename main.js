@@ -159,16 +159,7 @@ function randomCoordinates() {
 }
 
 function detectHit(p1, p2) {
-    console.log(p1.x, p1.y, p2.x, p2.y)
-    console.log(p1.width, p1.height, p2.width, p2.height)
-    console.log(p1.changeX, p1.changeY)
-    console.log(`game width: ${game.width}`)
-    console.log(`game height: ${game.height}`)
-    let hitTest =
-        p1.y + p1.height > p2.y &&
-        p1.y < p2.y + p2.height &&
-        p1.x + p1.width > p2.x &&
-        p1.x < p2.x + p2.width; // {boolean} : if all are true -> hit
+    let hitTest = p1.x == p2.x && p1.y == p2.y
 
     if (hitTest) {
         // add 100 points
