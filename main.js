@@ -34,7 +34,7 @@ class Snake {
 
         this.render = function () {
             ctx.fillStyle = this.color
-            ctx.strokestyle = 'black'
+            // ctx.strokestyle = 'black'
 
             // ctx.fillRect(this.x, this.y, this.width, this.height)
             for (let i = 0; i < array.length; i++) {
@@ -47,37 +47,32 @@ class Snake {
 
         }
         this.move = function () {
-
+        // head move 1 step, tail move one step. Therefore, unshift arr 1, pop arr 1
             if (this.alive) {
-                // console.log(this.changeX)
                 array.unshift([array[0][0] + this.changeX, array[0][1] + this.changeY])
                 array.pop()
                 this.render()
-                // console.log(array)
-                // this.x += 10
             }
         }
         this.eatMouse = function () {
-            let l = array.length
-            console.log("eatMouse" + array.length)
-            if (array[array.length - 1][1] == array[array.length - 2][1] && array[array.length - 1][0] - array[array.length - 2][0] > 0) {
-                array.push([array[array.length - 1][0] + this.changeX, array[array.length - 1][1]])
-            }
-            else if (array[array.length - 1][1] == array[array.length - 2][1] && array[array.length - 1][0] - array[array.length - 2][0] < 0) {
-                array.push([array[array.length - 1][0] - this.changeX, array[array.length - 1][1]])
-            }
-            else if (array[array.length - 1][0] == array[array.length - 2][0] && array[array.length - 1][1] - array[array.length - 2][1] < 0) {
-                array.push([array[array.length - 1][0], array[array.length - 1][1]] - this.changeY)
-            }
-            else if (array[array.length - 1][0] == array[array.length - 2][0] && array[array.length - 1][1] - array[array.length - 2][1] > 0) {
-                array.push([array[array.length - 1][0], array[array.length - 1][1]] + this.changeY)
-            }
+            array.unshift([array[0][0] + this.changeX, array[0][1] + this.changeY])
+        //     let l = array.length
+        //     console.log(this.changeX, this.changeY)
+        //     if (array[l - 1][1] == array[l - 2][1] && array[l - 1][0] - array[l - 2][0] > 0) {
+        //         array.push([array[l - 1][0] + this.changeX, array[l - 1][1]])
+        //     }
+        //     else if (array[l - 1][1] == array[l - 2][1] && array[l - 1][0] - array[l - 2][0] < 0) {
+        //         array.push([array[l - 1][0] - this.changeX, array[l - 1][1]])
+        //     }
+        //     else if (array[l - 1][0] == array[l - 2][0] && array[l - 1][1] - array[l - 2][1] < 0) {
+        //         array.push([array[l - 1][0], array[l - 1][1]] - this.changeY)
+        //     }
+        //     else if (array[l - 1][0] == array[l - 2][0] && array[l - 1][1] - array[l - 2][1] > 0) {
+        //         array.push([array[l - 1][0], array[l - 1][1]] + this.changeY)
+        //     }
         }
 
         this.detectCollision = function () {
-            // console.log(game.height )
-            // console.log(game.width )
-            // console.log(array[0][1])
 
             if (array[0][0] < 0 || array[0][0] > game.width - snake.width || array[0][1] < 0 || array[0][1] > game.height - snake.height) {
                 gameStatus.textContent = 'you hit the wall'
@@ -151,7 +146,7 @@ function addNewTarget() {
 
 function randomCoordinates() {
     let x, y
-    while (x % 20 != 0 || y % 20 != 0) {
+    while (x % 20 != 0 || y % 20 != 0 || x < 0 || y < 0) {
         x = Math.floor(Math.random() * game.width) - 20;
         y = Math.floor(Math.random() * game.height) - 20;
     }
@@ -159,6 +154,7 @@ function randomCoordinates() {
 }
 
 function detectHit(p1, p2) {
+    // console.log(p2.x, p2.y)
     let hitTest = p1.x == p2.x && p1.y == p2.y
 
     if (hitTest) {
