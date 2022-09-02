@@ -105,6 +105,40 @@ class Mouse {
 //  KEYBOARD INTERACTION LOGIC
 const movementHandler = (e) => {
     e.preventDefault()
+    // let direction = e.key
+    // let nextDirection = direction
+    // let allowedDirections = []
+    // switch (direction) {
+    //     case 'ArrowUp':
+    //     case 'ArrowDown':
+    //         allowedDirections = ['ArrowLeft', 'ArrowRight']
+    //     case 'ArrowLeft':
+    //     case 'ArrowRight':
+    //         allowedDirections = ['ArrowUp', 'ArrowDown']
+    // }
+    // if (allowedDirections.includes(direction)) {
+    //     nextDirection = direction
+    // } else {
+    //     nextDirection = snake.direction
+    // }
+    // console.log(`nextDirection: ${nextDirection}`)
+    // console.log(`direction: ${direction}`)
+    //     snake.changeX = 0
+    //     snake.changeY = 0
+    //     switch (nextDirection) {
+    //         case 'ArrowUp':
+    //             snake.changeY = -snake.height
+    //             break;
+    //         case 'ArrowDown':
+    //             snake.changeY = snake.height
+    //             break;
+    //         case 'ArrowLeft':
+    //             snake.changeX = -snake.width
+    //             break;
+    //         case 'ArrowRight':
+    //             snake.changeX = snake.width
+    //             break;
+    //     }
     switch (e.key) {
         case 'w':
         case 'W':
@@ -131,9 +165,7 @@ const movementHandler = (e) => {
             snake.changeY = 0
             break
     }
-
 }
-
 
 function addNewTarget() {
     target.alive = false;
