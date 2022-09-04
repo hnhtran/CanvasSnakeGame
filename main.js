@@ -28,7 +28,6 @@ class Snake {
         this.height = height
         this.alive = true
 
-
         this.changeX = changeX
         this.changeY = changeY
 
@@ -61,7 +60,7 @@ class Snake {
         this.detectCollision = function () {
         // detect if snake hit the walls, detect if the snake hit itself
             // hit the walls
-            if (array[0][0] < 0 || array[0][0] > game.width - snake.width || array[0][1] < 0 || array[0][1] > game.height - snake.height) {
+            if (array[0][0] < 0 || array[0][0] > game.width - snake.width|| array[0][1] < 0 || array[0][1] > game.height - snake.height) {
                 gameStatus.textContent = 'you hit the wall'
                 console.log("you hit the wall")
                 snake.alive = false;
@@ -79,7 +78,6 @@ class Snake {
             }
             return snake.alive
         }
-
 
     }
 }
@@ -103,68 +101,75 @@ class Mouse {
 }
 // ====================== HELPER FUNCTIONS ======================= //
 //  KEYBOARD INTERACTION LOGIC
+let direction = 'ArrowRight'
 const movementHandler = (e) => {
     e.preventDefault()
-    // let direction = e.key
-    // let nextDirection = direction
-    // let allowedDirections = []
-    // switch (direction) {
-    //     case 'ArrowUp':
-    //     case 'ArrowDown':
-    //         allowedDirections = ['ArrowLeft', 'ArrowRight']
-    //     case 'ArrowLeft':
-    //     case 'ArrowRight':
-    //         allowedDirections = ['ArrowUp', 'ArrowDown']
-    // }
-    // if (allowedDirections.includes(direction)) {
-    //     nextDirection = direction
-    // } else {
-    //     nextDirection = snake.direction
-    // }
-    // console.log(`nextDirection: ${nextDirection}`)
-    // console.log(`direction: ${direction}`)
-    //     snake.changeX = 0
-    //     snake.changeY = 0
-    //     switch (nextDirection) {
-    //         case 'ArrowUp':
-    //             snake.changeY = -snake.height
-    //             break;
-    //         case 'ArrowDown':
-    //             snake.changeY = snake.height
-    //             break;
-    //         case 'ArrowLeft':
-    //             snake.changeX = -snake.width
-    //             break;
-    //         case 'ArrowRight':
-    //             snake.changeX = snake.width
-    //             break;
-    //     }
-    switch (e.key) {
-        case 'w':
-        case 'W':
+    let newDirection = e.key
+    let nextDirection
+    let allowedDirections = []
+    console.log(`direction: ${direction}`)
+    switch (direction) {
         case 'ArrowUp':
-            snake.changeX = 0
-            snake.changeY = -snake.height
-            break
-        case 's':
-        case 'S':
         case 'ArrowDown':
-            snake.changeX = 0
-            snake.changeY = snake.height
+            allowedDirections = ['ArrowLeft', 'ArrowRight']
             break
         case 'ArrowLeft':
-        case 'a':
-        case 'A':
-            snake.changeX = -snake.width
-            snake.changeY = 0
-            break
-        case 'd':
-        case 'D':
         case 'ArrowRight':
-            snake.changeX = snake.width
-            snake.changeY = 0
+            allowedDirections = ['ArrowUp', 'ArrowDown']
             break
+        default:
+            throw new Error('invalid direction')
     }
+    if (allowedDirections.includes(newDirection)) {
+        console.log(`new direction: ${newDirection}`)
+        nextDirection = newDirection
+        direction = nextDirection
+    } 
+    console.log(`nextDirection: ${nextDirection}`)
+    console.log(`direction: ${direction}`)
+    console.log(`allowedDirections: ${allowedDirections}`)
+        snake.changeX = 0
+        snake.changeY = 0
+        switch (nextDirection) {
+            case 'ArrowUp':
+                snake.changeY = -snake.height
+                break;
+            case 'ArrowDown':
+                snake.changeY = snake.height
+                break;
+            case 'ArrowLeft':
+                snake.changeX = -snake.width
+                break;
+            case 'ArrowRight':
+                snake.changeX = snake.width
+                break;
+        }
+    // switch (nextDirection) {
+    //     case 'w':
+    //     case 'W':
+    //     case 'ArrowUp':
+    //         snake.changeX = 0
+    //         snake.changeY = -snake.height
+    //         break
+    //     case 's':
+    //     case 'S':
+    //     case 'ArrowDown':
+    //         snake.changeX = 0
+    //         snake.changeY = snake.height
+    //         break
+    //     case 'ArrowLeft':
+    //     case 'a':
+    //     case 'A':
+    //         snake.changeX = -snake.width
+    //         snake.changeY = 0
+    //         break
+    //     case 'd':
+    //     case 'D':
+    //     case 'ArrowRight':
+    //         snake.changeX = snake.width
+    //         snake.changeY = 0
+    //         break
+    // }
 }
 
 function addNewTarget() {
