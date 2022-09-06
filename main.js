@@ -128,48 +128,48 @@ const movementHandler = (e) => {
     console.log(`nextDirection: ${nextDirection}`)
     console.log(`direction: ${direction}`)
     console.log(`allowedDirections: ${allowedDirections}`)
-        snake.changeX = 0
-        snake.changeY = 0
-        switch (nextDirection) {
-            case 'ArrowUp':
-                snake.changeY = -snake.height
-                break;
-            case 'ArrowDown':
-                snake.changeY = snake.height
-                break;
-            case 'ArrowLeft':
-                snake.changeX = -snake.width
-                break;
-            case 'ArrowRight':
-                snake.changeX = snake.width
-                break;
-        }
-    // switch (nextDirection) {
-    //     case 'w':
-    //     case 'W':
-    //     case 'ArrowUp':
-    //         snake.changeX = 0
-    //         snake.changeY = -snake.height
-    //         break
-    //     case 's':
-    //     case 'S':
-    //     case 'ArrowDown':
-    //         snake.changeX = 0
-    //         snake.changeY = snake.height
-    //         break
-    //     case 'ArrowLeft':
-    //     case 'a':
-    //     case 'A':
-    //         snake.changeX = -snake.width
-    //         snake.changeY = 0
-    //         break
-    //     case 'd':
-    //     case 'D':
-    //     case 'ArrowRight':
-    //         snake.changeX = snake.width
-    //         snake.changeY = 0
-    //         break
-    // }
+        // snake.changeX = 0
+        // snake.changeY = 0
+        // switch (nextDirection) {
+        //     case 'ArrowUp':
+        //         snake.changeY = -snake.height
+        //         break;
+        //     case 'ArrowDown':
+        //         snake.changeY = snake.height
+        //         break;
+        //     case 'ArrowLeft':
+        //         snake.changeX = -snake.width
+        //         break;
+        //     case 'ArrowRight':
+        //         snake.changeX = snake.width
+        //         break;
+        // }
+    switch (nextDirection) {
+        case 'w':
+        case 'W':
+        case 'ArrowUp':
+            snake.changeX = 0
+            snake.changeY = -snake.height
+            break
+        case 's':
+        case 'S':
+        case 'ArrowDown':
+            snake.changeX = 0
+            snake.changeY = snake.height
+            break
+        case 'ArrowLeft':
+        case 'a':
+        case 'A':
+            snake.changeX = -snake.width
+            snake.changeY = 0
+            break
+        case 'd':
+        case 'D':
+        case 'ArrowRight':
+            snake.changeX = snake.width
+            snake.changeY = 0
+            break
+    }
 }
 
 function addNewTarget() {
