@@ -144,7 +144,7 @@ const movementHandler = (e) => {
         //         snake.changeX = snake.width
         //         break;
         // }
-    switch (nextDirection) {
+    switch (e.key) {
         case 'w':
         case 'W':
         case 'ArrowUp':
